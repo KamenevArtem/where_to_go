@@ -5,5 +5,5 @@ from django.urls import path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.show_greeting)
+    path("", views.show_map)
 ]
