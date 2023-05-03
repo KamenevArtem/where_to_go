@@ -1,8 +1,14 @@
 import json
 import pathlib
 
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
 from .models import Place, Image
+
+
+def show_place(request, id):
+    place = get_object_or_404(Place, id=id)
+    return HttpResponse(place.title)
 
 
 def index(request):
@@ -12,7 +18,6 @@ def index(request):
     features = []
     for place in places:
         images = place.images.all()
-        print(place.lat, place.lng)
         details = {
             "title": place.title,
             "imgs": [img.image.url for img in images],
