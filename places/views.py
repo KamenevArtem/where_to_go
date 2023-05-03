@@ -12,6 +12,7 @@ def index(request):
     features = []
     for place in places:
         images = place.images.all()
+        print(place.lat, place.lng)
         details = {
             "title": place.title,
             "imgs": [img.image.url for img in images],
@@ -33,7 +34,7 @@ def index(request):
             "properties": {
                 "title": place.title,
                 "placeId": f"{place.id}",
-                "detailsUrl": ''
+                "detailsUrl": f'static/places/{place.id}.json'
             }
         }
         features.append(feature)
@@ -41,4 +42,4 @@ def index(request):
         "type": "FeatureCollection",
         "features": features
     }
-    return render(request, "index.html", context=locations)
+    return render(request, "index.html", context={"places": locations})
