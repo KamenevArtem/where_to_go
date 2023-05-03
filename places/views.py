@@ -3,10 +3,11 @@ import pathlib
 
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
-from .models import Place, Image
+from django.urls import reverse
+from .models import Place
 
 
-def show_place(request, id):
+def place_response(request, id):
     place = get_object_or_404(Place, id=id)
     images = place.images.all()
     details = {
@@ -40,7 +41,7 @@ def index(request):
             "properties": {
                 "title": place.title,
                 "placeId": f"{place.id}",
-                "detailsUrl": f'static/places/{place.id}.json'
+                "detailsUrl": reverse(place_response, kwargs={'id': place.id})
             }
         }
         features.append(feature)

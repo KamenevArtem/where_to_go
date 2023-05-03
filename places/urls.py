@@ -1,11 +1,11 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from .views import index, show_place
+from .views import index, place_response
 
 urlpatterns = [
     path('', index, name='index'),
-    path('places/<int:id>', show_place),
+    path('places/<int:id>', place_response),
 ]
 
 if settings.DEBUG:
