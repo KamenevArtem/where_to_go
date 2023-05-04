@@ -1,4 +1,3 @@
-import json
 import pathlib
 
 from django.http import JsonResponse
