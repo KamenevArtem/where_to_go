@@ -1,8 +1,10 @@
+from adminsortable2.admin import SortableAdminMixin, SortableTabularInline, SortableAdminBase
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Place, Image
 
-class Preview:
+
+class PreviewMixin:
     @staticmethod
     def show_preview(obj):
         return format_html(
@@ -12,22 +14,21 @@ class Preview:
         )
 
 
-class ImageInline(admin.TabularInline, Preview):
+class ImageInline(SortableTabularInline, PreviewMixin):
     model = Image
-    fields = ['number', 'place', 'show_preview', 'image']
+    fields = ['place', 'show_preview', 'image']
     readonly_fields = ['show_preview']
     extra = 5
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
-    list_display = ('title',)
-    inlines = [
-        ImageInline
-    ]
+class PlaceAdmin(SortableAdminBase, admin.ModelAdmin):
+    list_display = ('title', 'description_short', 'lng', 'lat')
+    list_editable = ['description_short', 'lng', 'lat']
+    pass
+
 
 @admin.register(Image)
-class ImageAdmin(admin.ModelAdmin, Preview):
-    list_display = ('place', 'number', 'show_preview')
-    list_editable = ['number']
+class ImageAdmin(SortableAdminMixin, admin.ModelAdmin, PreviewMixin):
+    list_display = ('id', 'show_preview', 'place', 'number')
     readonly_fields = ['show_preview']
