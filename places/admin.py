@@ -1,4 +1,4 @@
-from adminsortable2.admin import SortableAdminMixin, SortableTabularInline, SortableAdminBase
+from adminsortable2.admin import SortableAdminMixin, SortableAdminBase
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Place, Image
