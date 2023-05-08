@@ -38,7 +38,6 @@ class Image(models.Model):
     number = models.IntegerField(
         'Номер картинки',
         default=0,
-        unique=True
         )
     
     class Meta:

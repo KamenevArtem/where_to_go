@@ -38,19 +38,23 @@ class Command(BaseCommand):
                     'lat': place_description['coordinates']['lat'],
                 }
             )
-            for img_id, image_url in enumerate(place_description['imgs'], start=1):
-                image = requests.get(image_url)
-                image.raise_for_status()
-                if Image.objects.filter(number=img_id).exists():
-                    raise MultipleObjectsReturned
-                Image.objects.get_or_create(
-                image=ContentFile(
-                    image.content,
-                    name=f'{place_description["title"]}_{img_id}.jpg'
-                    ),
-                    place=place,
-                    number=img_id,
-                    )
-            logger.info(' Место успешно внесено в базу данных')
+            images_quantity_to_load = len(place_description['imgs'])
+            number_of_images = place.images.all().count()
+            if images_quantity_to_load!=number_of_images:
+                for img_id, image_url in enumerate(place_description['imgs'], start=1):
+                    image = requests.get(image_url)
+                    image.raise_for_status()
+                    image_name = f'{place_description["title"]}_{img_id}.jpg'
+                    Image.objects.get_or_create(
+                    image=ContentFile(
+                        image.content,
+                        name=image_name
+                        ),
+                        place=place,
+                        number=img_id,
+                        )
+                logger.info(' Место успешно внесено в базу данных')
+            else:
+                raise MultipleObjectsReturned
         except requests.HTTPError:
             logger.warning('Проблемы при загрузке json файла')
