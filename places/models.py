@@ -31,10 +31,14 @@ class Image(models.Model):
         blank=True,
         null=True,
         )
-    image = models.ImageField('Файл картинки')
+    image = models.ImageField(
+        'Файл картинки',
+        unique=True
+        )
     number = models.IntegerField(
         'Номер картинки',
-        default=0
+        default=0,
+        unique=True
         )
     
     class Meta:

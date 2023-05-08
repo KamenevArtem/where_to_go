@@ -1,5 +1,3 @@
-import pathlib
-
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
@@ -26,8 +24,6 @@ def place_response(request, id):
 
 
 def index(request):
-    script_path = pathlib.Path.cwd()
-    places_path = script_path.joinpath('static/places')
     places = Place.objects.all()
     features = []
     for place in places:

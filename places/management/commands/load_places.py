@@ -3,6 +3,7 @@ import os
 
 import requests
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand, CommandParser
 from places.models import Place, Image
@@ -37,21 +38,19 @@ class Command(BaseCommand):
                     'lat': place_description['coordinates']['lat'],
                 }
             )
-            for img_id, img in enumerate(place_description['imgs'], start=1):
-                image, _ = Image.objects.update_or_create(
+            for img_id, image_url in enumerate(place_description['imgs'], start=1):
+                image = requests.get(image_url)
+                image.raise_for_status()
+                if Image.objects.filter(number=img_id).exists():
+                    raise MultipleObjectsReturned
+                Image.objects.get_or_create(
+                image=ContentFile(
+                    image.content,
+                    name=f'{place_description["title"]}_{img_id}.jpg'
+                    ),
                     place=place,
                     number=img_id,
-                )
-                img_response = requests.get(img)
-                img_response.raise_for_status()
-
-                img_content = ContentFile(img_response.content)
-                image.image.save(
-
-                    os.path.basename(img_response.url),
-                    img_content,
-                    save=True
-                )
+                    )
             logger.info(' Место успешно внесено в базу данных')
         except requests.HTTPError:
             logger.warning('Проблемы при загрузке json файла')
