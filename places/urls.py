@@ -5,7 +5,7 @@ from .views import index, place_response
 
 urlpatterns = [
     path('', index, name='index'),
-    path('places/<int:id>', place_response),
+    path('places/<int:id>/', place_response),
 ]
 
 if settings.DEBUG:
