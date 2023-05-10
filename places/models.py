@@ -33,9 +33,7 @@ class Image(models.Model):
         Place,
         verbose_name='Место',
         related_name='images',
-        on_delete=models.CASCADE,
-        blank=True,
-        null=True,
+        on_delete=models.CASCADE
         )
     image = models.ImageField(
         'Файл картинки',
