@@ -1,5 +1,4 @@
 import logging
-import os
 
 import requests
 
@@ -16,7 +15,6 @@ logger.setLevel(logging.INFO)
 
 class Command(BaseCommand):
     help = 'Загрузка информации о месте'
-    
     
     def add_arguments(self, parser: CommandParser):
         parser.add_argument(
